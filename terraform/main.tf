@@ -8,6 +8,8 @@ terraform {
     }
   }
 
+  #==========REMOTE BACKEND STATE CONFIGURATION===========
+
   backend "s3" {
     bucket         = "starttech-terraform-state-093796422475"
     key            = "global/terraform.tfstate"
@@ -17,6 +19,7 @@ terraform {
   }
 }
 
+#==========PROVIDERS===========
 provider "aws" {
   region = var.aws_region
 
@@ -29,9 +32,24 @@ provider "aws" {
   }
 }
 
+
+#===========NETWORKING MODULE===========
 module "networking" {
   source = "./modules/networking"
 
   environment = var.environment
   vpc_cidr    = var.vpc_cidr
+}
+
+
+#===========COMPUTE MODULE===========
+module "compute" {
+  source = "./modules/compute"
+
+  environment            = var.environment
+  vpc_id                 = module.networking.vpc_id
+  public_subnets         = module.networking.public_subnets
+  private_subnets        = module.networking.private_subnets
+  alb_security_group     = module.networking.alb_security_group
+  backend_security_group = module.networking.backend_security_group
 }

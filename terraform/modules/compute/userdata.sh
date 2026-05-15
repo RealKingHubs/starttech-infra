@@ -8,6 +8,9 @@ systemctl enable docker
 systemctl start docker
 usermod -aG docker ec2-user
 
+# Install AWS CLI
+yum install -y aws-cli
+
 # Install CloudWatch Agent
 yum install -y amazon-cloudwatch-agent
 

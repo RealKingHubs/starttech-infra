@@ -6,6 +6,12 @@ terraform {
       source  = "hashicorp/aws"
       version = "~> 5.0"
     }
+
+    random = {
+      source  = "hashicorp/random"
+      version = "~> 3.5"
+    }
+
   }
 
   #==========REMOTE BACKEND STATE CONFIGURATION===========
@@ -52,4 +58,15 @@ module "compute" {
   private_subnets        = module.networking.private_subnets
   alb_security_group     = module.networking.alb_security_group
   backend_security_group = module.networking.backend_security_group
+}
+
+#===========Storage MODULE===========
+module "storage" {
+  source = "./modules/storage"
+
+  environment          = var.environment
+  vpc_id               = module.networking.vpc_id
+  public_subnets       = module.networking.public_subnets
+  private_subnets      = module.networking.private_subnets
+  redis_security_group = module.networking.redis_security_group
 }

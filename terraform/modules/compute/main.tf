@@ -150,10 +150,13 @@ resource "aws_launch_template" "backend" {
   image_id      = data.aws_ami.amazon_linux.id
   instance_type = "t3.micro"
 
-  vpc_security_group_ids = [var.backend_security_group]
-
   iam_instance_profile {
     name = aws_iam_instance_profile.backend.name
+  }
+
+  network_interfaces {
+    associate_public_ip_address = true
+    security_groups             = [var.backend_security_group]
   }
 
   user_data = base64encode(file("${path.module}/userdata.sh"))
@@ -195,13 +198,22 @@ resource "aws_autoscaling_group" "backend" {
 
   health_check_type = "ELB"
 
+  instance_refresh {
+    strategy = "Rolling"
+
+    preferences {
+      min_healthy_percentage = 50
+    }
+
+    triggers = ["launch_template"]
+  }
+
   tag {
     key                 = "Name"
     value               = "${var.environment}-backend"
     propagate_at_launch = true
   }
 }
-
 # -----------------------------
 # CPU SCALING POLICY
 # -----------------------------

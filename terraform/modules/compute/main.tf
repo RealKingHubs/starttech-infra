@@ -181,6 +181,16 @@ resource "aws_launch_template" "backend" {
     security_groups             = [var.backend_security_group]
   }
 
+  block_device_mappings {
+    device_name = "/dev/xvda"
+
+    ebs {
+      volume_size           = 20
+      volume_type           = "gp3"
+      delete_on_termination = true
+    }
+  }
+
   user_data = base64encode(file("${path.module}/userdata.sh"))
 
   monitoring {
@@ -195,6 +205,7 @@ resource "aws_launch_template" "backend" {
     }
   }
 }
+
 
 # -----------------------------
 # AUTO SCALING GROUP

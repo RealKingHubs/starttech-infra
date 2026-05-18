@@ -56,8 +56,8 @@ module "compute" {
   vpc_id                 = module.networking.vpc_id
   public_subnets         = module.networking.public_subnets
   private_subnets        = module.networking.private_subnets
-  alb_security_group     = module.networking.alb_security_group
-  backend_security_group = module.networking.backend_security_group
+  alb_security_group     = module.security.alb_security_group
+  backend_security_group = module.security.backend_security_group
 }
 
 #===========Storage MODULE===========
@@ -68,5 +68,13 @@ module "storage" {
   vpc_id               = module.networking.vpc_id
   public_subnets       = module.networking.public_subnets
   private_subnets      = module.networking.private_subnets
-  redis_security_group = module.networking.redis_security_group
+  redis_security_group = module.security.redis_security_group
+}
+
+#============Security Group============
+module "security" {
+  source = "./modules/security"
+
+  environment = var.environment
+  vpc_id       = module.networking.vpc_id
 }

@@ -59,14 +59,14 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "frontend" {
 # ORIGIN ACCESS CONTROL
 # -----------------------------
 
-# resource "aws_cloudfront_origin_access_control" "frontend" {
-#   name                              = "${var.environment}-frontend-oac"
-#   description                       = "OAC for private frontend bucket"
-#   origin_access_control_origin_type = "s3"
+resource "aws_cloudfront_origin_access_control" "frontend" {
+  name                              = "${var.environment}-frontend-oac"
+  description                       = "OAC for private frontend bucket"
+  origin_access_control_origin_type = "s3"
 
-#   signing_behavior = "always"
-#   signing_protocol = "sigv4"
-# }
+  signing_behavior = "always"
+  signing_protocol = "sigv4"
+}
 
 # -----------------------------
 # CLOUDFRONT DISTRIBUTION

@@ -1,0 +1,10 @@
+{
+  "commands": [
+    "aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 093796422475.dkr.ecr.us-east-1.amazonaws.com",
+    "docker pull 093796422475.dkr.ecr.us-east-1.amazonaws.com/dev-starttech-backend:78741f12a9fb43e448d994a094a168b39610cccc",
+    "docker stop backend || true",
+    "docker rm backend || true",
+    "docker run -d --name backend -p 8080:8080 -e PORT=8080 -e MONGO_URI='mongodb+srv://ucking480_db_user:Gu7jc9cB0HwE8xsJ@starttech-dev.tmckfhd.mongodb.net/?retryWrites=true&w=majority&appName=starttech-dev' -e DB_NAME=much_todo_db -e JWT_SECRET_KEY=dev-secret 093796422475.dkr.ecr.us-east-1.amazonaws.com/dev-starttech-backend:78741f12a9fb43e448d994a094a168b39610cccc",
+    "docker ps -a"
+  ]
+}

@@ -76,5 +76,5 @@ module "security" {
   source = "./modules/security"
 
   environment = var.environment
-  vpc_id       = module.networking.vpc_id
+  vpc_id      = module.networking.vpc_id
 }
